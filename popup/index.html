@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Popup Creator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="contentContainer">
+      <!-- Formulário -->
+      <div class="formSection">
+        <form id="formPopup" class="formCard">
+          <!-- Seção 1: Informações Básicas -->
+          <div class="accordionItem">
+            <button
+              type="button"
+              class="accordionHeader active"
+              data-section="informacoesBasicas"
+            >
+              <h3 class="accordionTitle">Informações Básicas</h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="accordionIcon rotated"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+
+            <div class="accordionContent" id="informacoesBasicas">
+              <div class="formGrid">
+                <div class="formGroup">
+                  <label for="numeroAcao" class="formLabel"
+                    >Número de Ação</label
+                  >
+                  <input
+                    type="number"
+                    id="numeroAcao"
+                    class="formInput"
+                    placeholder="0000"
+                    required
+                  />
+                </div>
+
+                <div class="formGroup">
+                  <label for="imagem" class="formLabel">Imagem</label>
+                  <div class="fileUploadContainer">
+                    <label for="imagem" class="fileUploadButton">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="uploadIcon"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        fill="none"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                      Selecionar imagem
+                    </label>
+                    <input
+                      type="file"
+                      id="imagem"
+                      name="imagem"
+                      accept=".png, .jpeg, .jpg"
+                      class="fileInput"
+                    />
+                  </div>
+                  <span class="statusArquivo" id="statusArquivo"
+                    >Nenhum arquivo selecionado</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seção 2: Tipo de Layout -->
+          <div class="accordionItem">
+            <button
+              type="button"
+              class="accordionHeader"
+              data-section="tipoLayout"
+            >
+              <h3 class="accordionTitle">Tipo de Layout</h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="accordionIcon"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+
+            <div class="accordionContent" id="tipoLayout" style="display: none">
+              <select id="selecionarLayout" class="formSelect">
+                <option value="335">
+                  POPUP COM IMAGEM LIVRE (TEXTOS JÁ FIXOS NA IMAGEM)
+                </option>
+                <option value="333">
+                  POPUP COM IMAGEM SUPERIOR - TÍTULO, SUBTÍTULO, TEXTO CTA
+                  (BOTÃO)
+                </option>
+                <option value="334">
+                  POPUP COM IMAGEM INFERIOR - TÍTULO, SUBTÍTULO, TEXTO CTA
+                  (BOTÃO)
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Seção 3: Conteúdo e Estilo -->
+          <div class="accordionItem">
+            <button
+              type="button"
+              class="accordionHeader"
+              data-section="conteudoEstilo"
+            >
+              <h3 class="accordionTitle">Conteúdo e Estilo</h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="accordionIcon"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+
+            <div
+              class="accordionContent"
+              id="conteudoEstilo"
+              style="display: none"
+            >
+              <!-- Título -->
+              <div id="tituloSection" class="contentSection">
+                <h4 class="contentSectionTitle">Título</h4>
+                <div class="formGrid3">
+                  <div class="col2">
+                    <label for="titulo" class="formLabel"
+                      >Texto do Título</label
+                    >
+                    <input
+                      type="text"
+                      id="titulo"
+                      class="formInput"
+                      placeholder="Escreva um título"
+                      value="Escreva um título"
+                    />
+                  </div>
+                  <div>
+                    <label for="tamanhoTitulo" class="formLabel">Tamanho</label>
+                    <select id="tamanhoTitulo" class="formSelect">
+                      <option value="65">Grande</option>
+                      <option value="50">Médio</option>
+                      <option value="40">Pequeno</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="corTitulo" class="formLabel"
+                      >Cor do Título</label
+                    >
+                    <div class="colorInputWrapper">
+                      <input
+                        type="color"
+                        id="corTituloColor"
+                        value="#ffffff"
+                        class="colorPicker"
+                      />
+                      <input
+                        type="text"
+                        id="corTitulo"
+                        class="colorInput"
+                        placeholder="#ffffff"
+                        value="#ffffff"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Subtítulo -->
+              <div id="subtituloSection" class="contentSection">
+                <h4 class="contentSectionTitle">Subtítulo</h4>
+                <div class="formGrid3">
+                  <div class="col2">
+                    <label for="subtitulo" class="formLabel"
+                      >Texto do Subtítulo</label
+                    >
+                    <input
+                      type="text"
+                      id="subtitulo"
+                      class="formInput"
+                      placeholder="Escreva um subtítulo"
+                      value="Escreva um subtítulo"
+                    />
+                  </div>
+                  <div>
+                    <label for="tamanhoSubtitulo" class="formLabel"
+                      >Tamanho</label
+                    >
+                    <select id="tamanhoSubtitulo" class="formSelect">
+                      <option value="22">Pequeno</option>
+                      <option value="28">Médio</option>
+                      <option value="32">Grande</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="corSubtitulo" class="formLabel"
+                      >Cor do Subtítulo</label
+                    >
+                    <div class="colorInputWrapper">
+                      <input
+                        type="color"
+                        id="corSubtituloColor"
+                        value="#ffffff"
+                        class="colorPicker"
+                      />
+                      <input
+                        type="text"
+                        id="corSubtitulo"
+                        class="colorInput"
+                        placeholder="#ffffff"
+                        value="#ffffff"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Botão CTA -->
+              <div id="ctaSection" class="contentSection">
+                <h4 class="contentSectionTitle">Botão de Ação (CTA)</h4>
+                <div class="formGroup">
+                  <label for="textoCTA" class="formLabel">Texto do Botão</label>
+                  <input
+                    type="text"
+                    id="textoCTA"
+                    class="formInput"
+                    placeholder="Escreva a CTA"
+                    value="Escreva a CTA"
+                  />
+                </div>
+                <div class="formGrid3">
+                  <div class="formGroup">
+                    <label for="corTextoCTA" class="formLabel"
+                      >Cor do Texto</label
+                    >
+                    <div class="colorInputWrapper">
+                      <input
+                        type="color"
+                        id="corTextoCTAColor"
+                        value="#000000"
+                        class="colorPicker"
+                      />
+                      <input
+                        type="text"
+                        id="corTextoCTA"
+                        class="colorInput"
+                        placeholder="#000000"
+                        value="#000000"
+                      />
+                    </div>
+                  </div>
+                  <div class="formGroup">
+                    <label for="corFundoCTA" class="formLabel"
+                      >Cor de Fundo</label
+                    >
+                    <div class="colorInputWrapper">
+                      <input
+                        type="color"
+                        id="corFundoCTAColor"
+                        value="#ffffff"
+                        class="colorPicker"
+                      />
+                      <input
+                        type="text"
+                        id="corFundoCTA"
+                        class="colorInput"
+                        placeholder="#ffffff"
+                        value="#ffffff"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label for="corBordaCTA" class="formLabel"
+                    >Cor da Borda</label
+                  >
+                  <div class="colorInputWrapper">
+                    <input
+                      type="color"
+                      id="corBordaCTAColor"
+                      value="#FFFFFF"
+                      class="colorPicker"
+                    />
+                    <input
+                      type="text"
+                      id="corBordaCTA"
+                      class="colorInput"
+                      placeholder="#FFFFFF"
+                      value="#FFFFFF"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cores de Fundo -->
+              <div id="fundoSection" class="contentSection">
+                <h4 class="contentSectionTitle">Cores de Fundo</h4>
+                <div class="formGrid">
+                  <div class="formGroup">
+                    <label for="corInicio" class="formLabel"
+                      >Cor de Início (Gradiente)</label
+                    >
+                    <div class="colorInputWrapper">
+                      <input
+                        type="color"
+                        id="corInicioColor"
+                        value="#9EEBFF"
+                        class="colorPicker"
+                      />
+                      <input
+                        type="text"
+                        id="corInicio"
+                        class="colorInput"
+                        placeholder="#9EEBFF"
+                        value="#9EEBFF"
+                      />
+                    </div>
+                  </div>
+                  <div class="formGroup">
+                    <label for="corFim" class="formLabel"
+                      >Cor de Fim (Gradiente)</label
+                    >
+                    <div class="colorInputWrapper">
+                      <input
+                        type="color"
+                        id="corFimColor"
+                        value="#000596"
+                        class="colorPicker"
+                      />
+                      <input
+                        type="text"
+                        id="corFim"
+                        class="colorInput"
+                        placeholder="#000596"
+                        value="#000596"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Botão Fechar -->
+              <div class="contentSection">
+                <h4 class="contentSectionTitle">Botão Fechar</h4>
+                <div class="formGrid">
+                  <div class="formGroup">
+                    <label for="textoBtnFechar" class="formLabel"
+                      >Texto do Botão</label
+                    >
+                    <input
+                      type="text"
+                      id="textoBtnFechar"
+                      class="formInput"
+                      placeholder="Fechar"
+                      value="Fechar"
+                    />
+                  </div>
+                  <div class="formGroup">
+                    <label for="corBtnFechar" class="formLabel"
+                      >Cor do Texto</label
+                    >
+                    <div class="colorInputWrapper">
+                      <input
+                        type="color"
+                        id="corBtnFecharColor"
+                        value="#ffffff"
+                        class="colorPicker"
+                      />
+                      <input
+                        type="text"
+                        id="corBtnFechar"
+                        class="colorInput"
+                        placeholder="#ffffff"
+                        value="#ffffff"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seção 4: Configurações de Link -->
+          <div class="accordionItem">
+            <button
+              type="button"
+              class="accordionHeader"
+              data-section="configuracoesLink"
+            >
+              <h3 class="accordionTitle">Configurações de Redirecionamento</h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="accordionIcon"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+
+            <div
+              class="accordionContent"
+              id="configuracoesLink"
+              style="display: none"
+            >
+              <div class="formGrid">
+                <div class="formGroup">
+                  <label for="tipoLink" class="formLabel">Tipo de Link</label>
+                  <select id="tipoLink" class="formSelect">
+                    <option value="3">Push Deep Link</option>
+                    <option value="1">Sem redirecionamento</option>
+                    <option value="2">Link</option>
+                  </select>
+                </div>
+                <div class="formGroup">
+                  <div
+                    id="linkSection"
+                    class="linkContainer"
+                    style="display: none"
+                  >
+                    <label for="link" class="formLabel">URL</label>
+                    <input
+                      type="text"
+                      id="link"
+                      class="formInput"
+                      placeholder="https://www.exemplo.com.br"
+                    />
+
+                    <label for="codigo" class="formLabel">Código</label>
+                    <select id="codigo" class="formSelect">
+                      <option value="">Selecione um código</option>
+                      <option value="manual">Inserir código manualmente</option>
+                      <option value="001">001 - Compartilhamento</option>
+                      <option value="002">002 - Campanha</option>
+                      <option value="003">003 - Notificação</option>
+                    </select>
+                    <div
+                      id="codigoManualContainer"
+                      class="manualInputContainer"
+                      style="display: none"
+                    >
+                      <input
+                        type="text"
+                        id="codigoManual"
+                        placeholder="Digite o código manualmente"
+                        class="formInput"
+                      />
+                    </div>
+                  </div>
+
+                  <div id="pushSection" class="linkContainer">
+                    <label for="ID" class="formLabel">Redirecionamento</label>
+                    <select id="ID" class="formSelect">
+                      <option value="">Selecione</option>
+                      <option value="manual">Inserir ID manualmente</option>
+                      <option value="101">101 - Home</option>
+                      <option value="102">102 - Perfil</option>
+                      <option value="103">103 - Notificações</option>
+                    </select>
+                    <div
+                      id="IDManualContainer"
+                      class="manualInputContainer"
+                      style="display: none"
+                    >
+                      <input
+                        type="text"
+                        id="IDManual"
+                        placeholder="Digite o ID manualmente"
+                        class="formInput"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botão de Ação -->
+          <div class="actionButtonContainer">
+            <button type="button" id="btnEnviarAPI" class="btnGerarScript">
+              Enviar para API
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Preview -->
+      <div class="previewSection">
+        <!-- Mockup do telefone -->
+        <div class="phoneMockup">
+          <div class="phoneNotch"></div>
+          <div class="phoneScreen">
+            <!-- Container do Popup (tela cheia) -->
+            <div class="popupContainer">
+              <!-- Popup com Imagem Livre (335) -->
+              <div id="popupPreviewFull" class="popupPreviewFull">
+                <div id="popupImageFull" class="popupImageFull">
+                  <div id="btnFecharFull" class="btnFechar">
+                    X <span id="btnFecharTextoFull">Fechar</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Popup com Imagem Superior (333) -->
+              <div
+                id="popupPreview333"
+                class="popupPreview"
+                style="display: none"
+              >
+                <div id="btnFechar333" class="btnFechar">
+                  X <span id="btnFecharTexto333">Fechar</span>
+                </div>
+                <div id="popupImageTop" class="popupImageTop"></div>
+                <div class="popupContent">
+                  <div id="popupTitle333" class="popupTitle">
+                    Escreva um título
+                  </div>
+                  <div id="popupSubtitle333" class="popupSubtitle">
+                    Escreva um subtítulo
+                  </div>
+                </div>
+                <div id="popupCTA333" class="popupCTA">Escreva a CTA</div>
+              </div>
+
+              <!-- Popup com Imagem Inferior (334) -->
+              <div
+                id="popupPreview334"
+                class="popupPreview"
+                style="display: none"
+              >
+                <div id="btnFechar334" class="btnFechar">
+                  X <span id="btnFecharTexto334">Fechar</span>
+                </div>
+                <div class="popupContent">
+                  <div id="popupTitle334" class="popupTitle">
+                    Escreva um título
+                  </div>
+                  <div id="popupSubtitle334" class="popupSubtitle">
+                    Escreva um subtítulo
+                  </div>
+                </div>
+                <div id="popupImageMiddle" class="popupImageMiddle"></div>
+                <div id="popupCTA334" class="popupCTA">Escreva a CTA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para status da API -->
+    <div id="statusModal" class="modal">
+      <div class="modalContent">
+        <h3 id="modalTitle" class="modalTitle">Processando...</h3>
+        <p id="modalMessage" class="modalMessage">Enviando dados para a API.</p>
+        <button id="modalButton" class="modalButton">OK</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

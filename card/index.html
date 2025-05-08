@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Card Creator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="contentContainer">
+      <!-- Formulário -->
+      <div class="formSection">
+        <form id="formCard" class="formCard">
+          <!-- Seção 1: Informações Básicas -->
+          <div class="accordionItem">
+            <button
+              type="button"
+              class="accordionHeader active"
+              data-section="informacoesBasicas"
+            >
+              <h3 class="accordionTitle">Informações Básicas</h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="accordionIcon rotated"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+
+            <div class="accordionContent" id="informacoesBasicas">
+              <div class="formGrid">
+                <div class="formGroup">
+                  <label for="numeroAcao" class="formLabel"
+                    >Número de Ação</label
+                  >
+                  <input
+                    type="number"
+                    id="numeroAcao"
+                    class="formInput"
+                    placeholder="0000"
+                    required
+                  />
+                </div>
+
+                <div class="formGroup">
+                  <label for="imagem" class="formLabel">Imagem</label>
+                  <div class="fileUploadContainer">
+                    <label for="imagem" class="fileUploadButton"
+                      >Selecionar imagem</label
+                    >
+                    <input
+                      type="file"
+                      id="imagem"
+                      name="imagem"
+                      accept=".png, .jpeg, .jpg"
+                      class="fileInput"
+                    />
+                  </div>
+                  <span class="statusArquivo" id="statusArquivo"
+                    >Nenhum arquivo selecionado</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seção 2: Tipo de Layout -->
+          <div class="accordionItem">
+            <button
+              type="button"
+              class="accordionHeader"
+              data-section="tipoLayout"
+            >
+              <h3 class="accordionTitle">Tipo de Layout</h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="accordionIcon"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+
+            <div class="accordionContent" id="tipoLayout" style="display: none">
+              <label for="selecionarLayout" class="formLabel"
+                >Tipo de Layout</label
+              >
+              <select id="selecionarLayout" class="formSelect">
+                <option value="319">
+                  Cartão com imagem à esquerda - título, subtítulo e CTA à
+                  direita
+                </option>
+                <option value="320">
+                  Cartão com imagem à esquerda - título e CTA à direita (sem
+                  subtítulo)
+                </option>
+                <option value="321">
+                  Cartão com imagem à esquerda - subtítulo e CTA à direita (sem
+                  título)
+                </option>
+                <option value="271">
+                  Cartão com imagem à esquerda - título e subtítulo à direita
+                  (sem CTA)
+                </option>
+                <option value="322">
+                  Cartão com imagem à direita - título, subtítulo e CTA à
+                  esquerda
+                </option>
+                <option value="323">
+                  Cartão com imagem à direita - título e CTA à esquerda (sem
+                  subtítulo)
+                </option>
+                <option value="324">
+                  Cartão com imagem à direita - subtítulo e CTA à esquerda (sem
+                  título)
+                </option>
+                <option value="275">
+                  Cartão com imagem à direita - título e subtítulo à esquerda
+                  (sem CTA)
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Seção 3: Conteúdo e Cores -->
+          <div class="accordionItem">
+            <button
+              type="button"
+              class="accordionHeader"
+              data-section="conteudoCores"
+            >
+              <h3 class="accordionTitle">Conteúdo e Cores</h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="accordionIcon"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+
+            <div
+              class="accordionContent"
+              id="conteudoCores"
+              style="display: none"
+            >
+              <!-- Título e Cor do Título -->
+              <div id="tituloSection" class="formGrid">
+                <div class="formGroup">
+                  <label for="titulo" class="formLabel">Título</label>
+                  <input
+                    type="text"
+                    id="titulo"
+                    class="formInput"
+                    placeholder="Escreva um título"
+                    maxlength="25"
+                    value="Escreva um título"
+                  />
+                </div>
+                <div class="formGroup">
+                  <label for="corTitulo" class="formLabel">Cor do Título</label>
+                  <div class="colorInputContainer">
+                    <input
+                      type="color"
+                      id="corTituloColor"
+                      value="#1526FF"
+                      class="colorPicker"
+                    />
+                    <input
+                      type="text"
+                      id="corTitulo"
+                      class="formInput"
+                      placeholder="#000000"
+                      pattern="^\S+$"
+                      value="#1526FF"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Subtítulo e Cor do Subtítulo -->
+              <div id="subtituloSection" class="formGrid">
+                <div class="formGroup">
+                  <label for="subtitulo" class="formLabel">Subtítulo</label>
+                  <input
+                    type="text"
+                    id="subtitulo"
+                    class="formInput"
+                    placeholder="Escreva um subtítulo"
+                    maxlength="90"
+                    value="Escreva um subtítulo"
+                  />
+                </div>
+                <div class="formGroup">
+                  <label for="corSubtitulo" class="formLabel"
+                    >Cor do Subtítulo</label
+                  >
+                  <div class="colorInputContainer">
+                    <input
+                      type="color"
+                      id="corSubtituloColor"
+                      value="#1526FF"
+                      class="colorPicker"
+                    />
+                    <input
+                      type="text"
+                      id="corSubtitulo"
+                      class="formInput"
+                      placeholder="#000000"
+                      pattern="^\S+$"
+                      value="#1526FF"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Texto CTA e Cor do Texto CTA -->
+              <div id="ctaSection" class="formGrid">
+                <div class="formGroup">
+                  <label for="textoCTA" class="formLabel">Texto CTA</label>
+                  <input
+                    type="text"
+                    id="textoCTA"
+                    class="formInput"
+                    placeholder="Escreva a CTA"
+                    value="Escreva a CTA"
+                  />
+                </div>
+                <div class="formGroup">
+                  <label for="corTextoCTA" class="formLabel"
+                    >Cor do Texto CTA</label
+                  >
+                  <div class="colorInputContainer">
+                    <input
+                      type="color"
+                      id="corTextoCTAColor"
+                      value="#FFFFFF"
+                      class="colorPicker"
+                    />
+                    <input
+                      type="text"
+                      id="corTextoCTA"
+                      class="formInput"
+                      placeholder="#FFFFFF"
+                      pattern="^\S+$"
+                      value="#FFFFFF"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cores de Fundo -->
+              <div class="formGrid">
+                <div class="formGroup">
+                  <label for="corInicio" class="formLabel"
+                    >Cor de Início do Fundo</label
+                  >
+                  <div class="colorInputContainer">
+                    <input
+                      type="color"
+                      id="corInicioColor"
+                      value="#E1E2E0"
+                      class="colorPicker"
+                    />
+                    <input
+                      type="text"
+                      id="corInicio"
+                      class="formInput"
+                      placeholder="#9EEBFF"
+                      pattern="^\S+$"
+                      value="#E1E2E0"
+                    />
+                  </div>
+                </div>
+                <div class="formGroup">
+                  <label for="corFim" class="formLabel"
+                    >Cor de Fim do Fundo</label
+                  >
+                  <div class="colorInputContainer">
+                    <input
+                      type="color"
+                      id="corFimColor"
+                      value="#E1E2E0"
+                      class="colorPicker"
+                    />
+                    <input
+                      type="text"
+                      id="corFim"
+                      class="formInput"
+                      placeholder="#000596"
+                      pattern="^\S+$"
+                      value="#E1E2E0"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cores de CTA -->
+              <div id="coresCTASection" class="formGrid">
+                <div class="formGroup">
+                  <label for="corFundoCTA" class="formLabel"
+                    >Cor de Fundo CTA</label
+                  >
+                  <div class="colorInputContainer">
+                    <input
+                      type="color"
+                      id="corFundoCTAColor"
+                      value="#1526FF"
+                      class="colorPicker"
+                    />
+                    <input
+                      type="text"
+                      id="corFundoCTA"
+                      class="formInput"
+                      placeholder="#000000"
+                      pattern="^\S+$"
+                      value="#1526FF"
+                    />
+                  </div>
+                </div>
+                <div class="formGroup">
+                  <label for="corBordaCTA" class="formLabel"
+                    >Cor da Borda CTA</label
+                  >
+                  <div class="colorInputContainer">
+                    <input
+                      type="color"
+                      id="corBordaCTAColor"
+                      value="#1526FF"
+                      class="colorPicker"
+                    />
+                    <input
+                      type="text"
+                      id="corBordaCTA"
+                      class="formInput"
+                      placeholder="#FFFFFF"
+                      pattern="^\S+$"
+                      value="#1526FF"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seção 4: Configurações de Link -->
+          <div class="accordionItem">
+            <button
+              type="button"
+              class="accordionHeader"
+              data-section="configuracoesLink"
+            >
+              <h3 class="accordionTitle">Configurações de Link</h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="accordionIcon"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+
+            <div
+              class="accordionContent"
+              id="configuracoesLink"
+              style="display: none"
+            >
+              <div class="formGrid">
+                <div class="formGroup">
+                  <label for="tipoLink" class="formLabel">Tipo de Link</label>
+                  <select id="tipoLink" class="formSelect">
+                    <option value="3">Push Deep Link</option>
+                    <option value="1">Sem redirecionamento</option>
+                    <option value="2">Link</option>
+                  </select>
+                </div>
+                <div class="formGroup">
+                  <div
+                    id="linkSection"
+                    class="linkContainer"
+                    style="display: none"
+                  >
+                    <label for="link" class="formLabel">Link</label>
+                    <input
+                      type="text"
+                      id="link"
+                      class="formInput"
+                      placeholder="https://www.exemplo.com.br"
+                    />
+
+                    <label for="codigo" class="formLabel">Código</label>
+                    <select id="codigo" class="formSelect">
+                      <option value="">Selecione um código</option>
+                      <option value="manual">Inserir código manualmente</option>
+                      <option value="001">001 - Compartilhamento</option>
+                      <option value="002">002 - Campanha</option>
+                      <option value="003">003 - Notificação</option>
+                    </select>
+                    <div
+                      id="codigoManualContainer"
+                      class="manualInputContainer"
+                      style="display: none"
+                    >
+                      <input
+                        type="text"
+                        id="codigoManual"
+                        placeholder="Digite o código manualmente"
+                        class="formInput"
+                      />
+                    </div>
+                  </div>
+
+                  <div id="pushSection" class="linkContainer">
+                    <label for="ID" class="formLabel">Redirecionamento</label>
+                    <select id="ID" class="formSelect">
+                      <option value="">Selecione</option>
+                      <option value="manual">Inserir ID manualmente</option>
+                      <option value="101">101 - Home</option>
+                      <option value="102">102 - Perfil</option>
+                      <option value="103">103 - Notificações</option>
+                    </select>
+                    <div
+                      id="IDManualContainer"
+                      class="manualInputContainer"
+                      style="display: none"
+                    >
+                      <input
+                        type="text"
+                        id="IDManual"
+                        placeholder="Digite o ID manualmente"
+                        class="formInput"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botão de Ação -->
+          <div class="actionButtonContainer">
+            <button type="button" id="btnEnviarAPI" class="btnEnviarAPI">
+              Enviar para API
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Preview -->
+      <div class="previewSection">
+        <!-- Mockup do telefone -->
+        <div class="phoneMockup">
+          <div class="phoneNotch"></div>
+          <div class="phoneScreen">
+            <!-- Status Bar -->
+            <div class="statusBar">
+              <div id="phoneTime">12:34</div>
+              <div class="statusBarIcons">
+                <span>•••</span>
+                <span>📶</span>
+                <span>🔋</span>
+              </div>
+            </div>
+
+            <!-- App Header - Área azul -->
+            <div class="appHeader">
+              <div class="headerTop">
+                <div class="greeting">Olá, Fulano(a)!</div>
+                <div class="headerControls">
+                  <div class="headerControl">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"
+                      ></path>
+                      <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accountInfo">Agência: 0001 | Conta: 09999999-1</div>
+
+              <div class="balanceLabel">Saldo</div>
+              <div class="balanceInfo">
+                <div class="balanceValue">R$ 2.138,28</div>
+                <div class="balanceAction">Ver extrato &gt;</div>
+              </div>
+            </div>
+
+            <!-- Quick Menu - Ícones de acesso rápido -->
+            <div class="quickMenu">
+              <div class="quickAccessItem">
+                <div class="quickAccessIcon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H5m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                    ></path>
+                  </svg>
+                </div>
+                <span class="quickAccessText">Pix</span>
+              </div>
+              <div class="quickAccessItem">
+                <div class="quickAccessIcon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                </div>
+                <span class="quickAccessText">Empréstimos</span>
+              </div>
+              <div class="quickAccessItem">
+                <div class="quickAccessIcon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                  </svg>
+                </div>
+                <span class="quickAccessText">Investir</span>
+              </div>
+              <div class="quickAccessItem">
+                <div class="quickAccessIcon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                    ></path>
+                  </svg>
+                </div>
+                <span class="quickAccessText">Pagar</span>
+              </div>
+            </div>
+
+            <!-- App Content -->
+            <div class="appContent">
+              <h3 class="appHeading">Destaques para você</h3>
+
+              <!-- Card Preview Layout -->
+              <div id="cardPreview" class="cardPreview layoutEsquerda">
+                <div
+                  id="cardPreviewIMG"
+                  class="cardPreviewIMG"
+                  style="order: 1"
+                ></div>
+                <div
+                  id="cardPreviewContent"
+                  class="cardPreviewContent"
+                  style="order: 2"
+                >
+                  <div id="tituloPreview" class="tituloPreview">
+                    Escreva um título
+                  </div>
+                  <div id="subtituloPreview" class="subtituloPreview">
+                    Escreva um subtítulo
+                  </div>
+                  <div id="textoCTAPreview" class="textoCTAPreview">
+                    Escreva a CTA
+                  </div>
+                </div>
+              </div>
+
+              <!-- Outros Cards -->
+              <div class="appCardWhite">
+                <div class="appCardHeader">
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 8px;
+                      "
+                    >
+                      <div
+                        style="
+                          background-color: #e5f0ff;
+                          border-radius: 50%;
+                          width: 32px;
+                          height: 32px;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          margin-right: 8px;
+                        "
+                      >
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#0047FF"
+                          stroke-width="2"
+                        >
+                          <path
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          ></path>
+                        </svg>
+                      </div>
+                      <h4 class="appCardTitle" style="margin: 0">
+                        Saque Aniversário FGTS
+                      </h4>
+                    </div>
+                    <p style="font-size: 0.8rem; margin: 0">
+                      Novidade! Antecipe agora seu saldo do FGTS com as melhores
+                      taxas de mercado!
+                    </p>
+                  </div>
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#0047FF"
+                      stroke-width="2"
+                    >
+                      <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="appCardWhite">
+                <div class="appCardHeader">
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 8px;
+                      "
+                    >
+                      <div
+                        style="
+                          background-color: #e5f0ff;
+                          border-radius: 50%;
+                          width: 32px;
+                          height: 32px;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          margin-right: 8px;
+                        "
+                      >
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#0047FF"
+                          stroke-width="2"
+                        >
+                          <path
+                            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                          ></path>
+                        </svg>
+                      </div>
+                      <h4 class="appCardTitle" style="margin: 0">Cartões</h4>
+                    </div>
+                    <p style="font-size: 0.8rem; margin: 0">
+                      Repaginamos a nossa área de cartões. Confira as novidades!
+                    </p>
+                  </div>
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#0047FF"
+                      stroke-width="2"
+                    >
+                      <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Barra de navegação inferior -->
+            <div class="bottomNav">
+              <div class="navItem active">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  class="navIcon"
+                >
+                  <path
+                    d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+                  ></path>
+                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>Início</span>
+              </div>
+              <div class="navItem">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  class="navIcon"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <span>Ajuda</span>
+              </div>
+              <div class="navItem">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  class="navIcon"
+                >
+                  <line x1="4" y1="12" x2="20" y2="12"></line>
+                  <line x1="4" y1="6" x2="20" y2="6"></line>
+                  <line x1="4" y1="18" x2="20" y2="18"></line>
+                </svg>
+                <span>Serviços</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para status da API -->
+    <div id="statusModal" class="modal">
+      <div class="modalContent">
+        <h3 id="modalTitle" class="modalTitle">Processando...</h3>
+        <p id="modalMessage" class="modalMessage">Enviando dados para a API.</p>
+        <button id="modalButton" class="modalButton">OK</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
