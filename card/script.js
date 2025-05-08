@@ -94,27 +94,36 @@ document.addEventListener("DOMContentLoaded", function () {
     const accordionIcons = document.querySelectorAll(".accordionIcon");
     const accordionHeaders = document.querySelectorAll(".accordionHeader");
 
-    // Fechar todas as seções primeiro
-    accordionContents.forEach((content) => {
-      content.style.display = "none";
-    });
-
-    accordionIcons.forEach((icon) => {
-      icon.classList.remove("rotated");
-    });
-
-    accordionHeaders.forEach((header) => {
-      header.classList.remove("active");
-    });
-
-    // Abrir a seção selecionada
+    // Verificar se a seção clicada já está aberta
     const content = document.getElementById(section);
     const header = document.querySelector(`[data-section="${section}"]`);
     const icon = header.querySelector(".accordionIcon");
+    const isActive = header.classList.contains("active");
 
-    content.style.display = "block";
-    icon.classList.add("rotated");
-    header.classList.add("active");
+    if (isActive) {
+      // Se já está ativa, apenas fechamos
+      content.style.display = "none";
+      icon.classList.remove("rotated");
+      header.classList.remove("active");
+    } else {
+      // Se não está ativa, fechamos todas e abrimos esta
+      accordionContents.forEach((item) => {
+        item.style.display = "none";
+      });
+
+      accordionIcons.forEach((item) => {
+        item.classList.remove("rotated");
+      });
+
+      accordionHeaders.forEach((item) => {
+        item.classList.remove("active");
+      });
+
+      // Abrir a seção clicada
+      content.style.display = "block";
+      icon.classList.add("rotated");
+      header.classList.add("active");
+    }
   };
 
   // Adicionar event listeners para os headers do accordion

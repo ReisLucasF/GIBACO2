@@ -3,7 +3,7 @@ const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const { Buffer } = require('buffer');
+const { Buffer } = require("buffer");
 
 // Configurar o Express
 const app = express();
@@ -13,26 +13,8 @@ const port = 3000;
 app.use(cors());
 
 // Configurar o middleware para JSON (com limite maior para imagens base64)
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
-
-// Configurar o multer para upload de arquivos
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    // Cria diretório para uploads se não existir
-    const uploadDir = path.join(__dirname, "uploads");
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    // Adiciona timestamp para evitar nomes duplicados
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
-const upload = multer({ storage: storage });
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // Listar todos os POSTs recebidos
 let receivedRequests = [];
@@ -40,79 +22,23 @@ let receivedRequests = [];
 // Rota para servir arquivos estáticos (HTML, CSS, JS)
 app.use(express.static("public"));
 
-// Função para salvar imagem base64 em arquivo
-function saveBase64Image(base64String, uploadDir) {
-  // Verificar se é uma string base64 válida
-  if (!base64String) return null;
-  
-  // Se a string incluir o prefixo "data:image/..."
-  let base64Data = base64String;
-  let fileExtension = 'jpg'; // padrão
-  
-  if (base64String.includes(';base64,')) {
-    // Extrair o tipo de imagem do prefixo
-    const matches = base64String.match(/^data:image\/([a-zA-Z0-9]+);base64,/);
-    if (matches && matches.length > 1) {
-      fileExtension = matches[1];
-    }
-    
-    // Remover o prefixo para obter apenas os dados
-    base64Data = base64String.replace(/^data:image\/[a-zA-Z0-9]+;base64,/, '');
-  }
-  
-  // Criar nome de arquivo único
-  const fileName = `${Date.now()}.${fileExtension}`;
-  const filePath = path.join(uploadDir, fileName);
-  
-  // Salvar o arquivo
-  fs.writeFileSync(filePath, base64Data, { encoding: 'base64' });
-  
-  return {
-    filename: fileName,
-    path: filePath,
-    mimetype: `image/${fileExtension}`,
-    size: Buffer.from(base64Data, 'base64').length
-  };
-}
-
 // Endpoint para popup-creator (aceita multipart/form-data)
 app.post("/popup-creator", upload.single("imagem"), (req, res) => {
   console.log("🔵 POST recebido em /popup-creator");
 
-  // Extrair informações do arquivo
-  const fileInfo = req.file
-    ? {
-        filename: req.file.filename,
-        originalname: req.file.originalname,
-        mimetype: req.file.mimetype,
-        size: req.file.size,
-        path: req.file.path,
-      }
-    : null;
-
-  // Registrar dados recebidos
   const requestData = {
     timestamp: new Date().toISOString(),
     body: req.body,
-    file: fileInfo,
   };
 
-  // Adicionar à lista e limitar a 10 itens
   receivedRequests.unshift(requestData);
   if (receivedRequests.length > 10) {
     receivedRequests = receivedRequests.slice(0, 10);
   }
 
-  // Log detalhado no console
   console.log("📄 Dados do formulário:");
   console.table(req.body);
 
-  if (fileInfo) {
-    console.log("🖼️  Arquivo recebido:");
-    console.table(fileInfo);
-  }
-
-  // Responder ao cliente
   res.status(200).json({
     success: true,
     message: "Popup criado com sucesso!",
@@ -123,103 +49,25 @@ app.post("/popup-creator", upload.single("imagem"), (req, res) => {
 // Endpoint para card-creator (aceita JSON com imagem base64)
 app.post("/card-creator", (req, res) => {
   console.log("🔵 POST recebido em /card-creator");
-  
-  try {
-    // Verificar se há body
-    if (!req.body) {
-      console.log("❌ Corpo da requisição vazio");
-      return res.status(400).json({
-        success: false,
-        message: "Corpo da requisição vazio"
-      });
-    }
-    
-    // Extrair dados do corpo
-    const { imagemBase64, ...bodyData } = req.body;
-    
-    // Log para verificação de dados recebidos
-    console.log("🔍 Verificando dados recebidos:");
-    console.log(`📋 Chaves no objeto: ${Object.keys(req.body).join(", ")}`);
-    
-    // Verificar se a imagem base64 foi recebida
-    if (imagemBase64) {
-      console.log("✅ Imagem base64 recebida!");
-      
-      // Log do tamanho da string base64
-      const base64Size = imagemBase64.length;
-      console.log(`📏 Tamanho da string base64: ${base64Size} caracteres`);
-      
-      // Log de uma amostra da string base64 (primeiros 100 caracteres)
-      console.log(`🔤 Amostra da string base64: ${imagemBase64.substring(0, 100)}...`);
-      
-      // Verificar formato da string base64
-      const isDataUrl = imagemBase64.startsWith('data:');
-      console.log(`🏷️ Formato: ${isDataUrl ? 'DataURL (com prefixo)' : 'String base64 pura'}`);
-      
-      if (isDataUrl) {
-        const matches = imagemBase64.match(/^data:([^;]+);base64,/);
-        if (matches && matches.length > 1) {
-          console.log(`🖼️ Tipo de mídia: ${matches[1]}`);
-        }
-      }
-    } else {
-      console.log("❌ Imagem base64 não encontrada na requisição");
-    }
-    
-    // Criar diretório para uploads se não existir
-    const uploadDir = path.join(__dirname, "uploads");
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    
-    // Salvar a imagem base64 se existir
-    let fileInfo = null;
-    if (imagemBase64) {
-      fileInfo = saveBase64Image(imagemBase64, uploadDir);
-      console.log("🖼️ Imagem base64 processada:");
-      if (fileInfo) {
-        console.table(fileInfo);
-      } else {
-        console.log("❌ Erro ao processar a imagem base64");
-      }
-    }
-    
-    // Registrar dados recebidos (sem incluir a imagem base64 completa)
-    const requestData = {
-      timestamp: new Date().toISOString(),
-      body: {
-        ...bodyData,
-        // Adicionar uma indicação de que a imagem base64 foi recebida, sem incluir o valor completo
-        imagemBase64: imagemBase64 ? `[Base64 String: ${imagemBase64.substring(0, 30)}...]` : null
-      },
-      file: fileInfo,
-    };
-    
-    // Adicionar à lista e limitar a 10 itens
-    receivedRequests.unshift(requestData);
-    if (receivedRequests.length > 10) {
-      receivedRequests = receivedRequests.slice(0, 10);
-    }
-    
-    // Log detalhado no console
-    console.log("📄 Dados do formulário (excluindo a imagem base64):");
-    console.table(bodyData);
-    
-    // Responder ao cliente
-    res.status(200).json({
-      success: true,
-      message: "Card criado com sucesso!",
-      requestId: Date.now(),
-      imageReceived: !!imagemBase64,
-      imageInfo: fileInfo
-    });
-  } catch (error) {
-    console.error("❌ Erro ao processar requisição:", error);
-    res.status(500).json({
-      success: false,
-      message: `Erro ao processar a requisição: ${error.message}`,
-    });
+
+  const requestData = {
+    timestamp: new Date().toISOString(),
+    body: req.body,
+  };
+
+  receivedRequests.unshift(requestData);
+  if (receivedRequests.length > 10) {
+    receivedRequests = receivedRequests.slice(0, 10);
   }
+
+  console.log("📄 Dados do formulário:");
+  console.table(req.body);
+
+  res.status(200).json({
+    success: true,
+    message: "Card criado com sucesso!",
+    requestId: Date.now(),
+  });
 });
 
 // Endpoint para visualizar todos os requests recebidos
@@ -353,7 +201,6 @@ app.get("/", (req, res) => {
                 
                 // Extrair dados do formulário
                 const formData = req.body;
-                const fileInfo = req.file;
                 
                 let formDataHtml = '';
                 for (const key in formData) {
@@ -363,17 +210,7 @@ app.get("/", (req, res) => {
                 }
                 
                 let fileHtml = '';
-                if (fileInfo) {
-                  fileHtml = 
-                    '<div class="file-info">' +
-                      '<h4>Arquivo:</h4>' +
-                      '<ul>' +
-                        '<li><strong>Nome:</strong> ' + fileInfo.filename + '</li>' +
-                        '<li><strong>Tipo:</strong> ' + fileInfo.mimetype + '</li>' +
-                        '<li><strong>Tamanho:</strong> ' + Math.round(fileInfo.size / 1024) + ' KB</li>' +
-                      '</ul>' +
-                    '</div>';
-                }
+
                 
                 card.innerHTML = 
                   '<h3>Requisição #' + (index + 1) + '</h3>' +
