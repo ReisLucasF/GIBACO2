@@ -496,15 +496,12 @@ document.addEventListener("DOMContentLoaded", function () {
     subtituloFinal = removerCaracteresIndesejados(subtituloFinal);
 
     // Converter a imagem para base64
-    let imagemBase64 = "";
+    let imagem = "";
     try {
-      imagemBase64 = await convertImageToBase64(imagemFile);
+      imagem = await convertImageToBase64(imagemFile);
       console.log("Imagem convertida para base64 com sucesso.");
-      console.log("Tamanho da string base64:", imagemBase64.length);
-      console.log(
-        "Amostra da string base64:",
-        imagemBase64.substring(0, 50) + "..."
-      );
+      console.log("Tamanho da string base64:", imagem.length);
+      console.log("Amostra da string base64:", imagem.substring(0, 50) + "...");
     } catch (error) {
       console.error("Erro ao converter imagem para base64:", error);
       showModal("Erro", `Falha ao converter imagem: ${error.message}`);
@@ -514,7 +511,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Preparar objeto JSON para envio
     const dadosJSON = {
       numeroAcao: numeroAcaoInput.value,
-      imagemBase64: imagemBase64, // Enviando a string base64 explicitamente
+      imagem: imagem, // Enviando a string base64 explicitamente
       tipoLayout: tipoLayout,
       titulo: tituloFinal,
       subtitulo: subtituloFinal,
@@ -534,7 +531,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     return dadosJSON;
   }
-
 
   // Modificação da função enviarParaAPI para validar o objeto JSON antes de enviar
   async function enviarParaAPI() {
@@ -557,7 +553,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Validar se a imagem base64 está presente
-      if (!dadosJSON.imagemBase64) {
+      if (!dadosJSON.imagem) {
         throw new Error("Imagem base64 não foi gerada corretamente");
       }
 
