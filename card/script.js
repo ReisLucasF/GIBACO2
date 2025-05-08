@@ -402,7 +402,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const reader = new FileReader();
 
       reader.onload = function (e) {
-        // e.target.result já contém a imagem como DataURL (exemplo: data:image/jpeg;base64,/9j/4AAQ...)
+        // e.target.result já contém a imagem como DataURL
         const dataUrl = e.target.result;
 
         // Você pode escolher enviar a string base64 com ou sem o prefixo data:image
@@ -423,7 +423,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Modificação da função prepararDadosAPI para enviar a imagem como base64 via FormData
+  // Modificação da função prepararDadosAPI para garantir que a imagem seja enviada como base64
   async function prepararDadosAPI() {
     const tipoLayout = selecionarLayoutSelect.value;
 
@@ -487,32 +487,47 @@ document.addEventListener("DOMContentLoaded", function () {
     subtituloFinal = removerCaracteresIndesejados(subtituloFinal);
 
     // Converter a imagem para base64
-    const imagemBase64 = await convertImageToBase64(imagemFile);
+    let imagemBase64 = "";
+    try {
+      imagemBase64 = await convertImageToBase64(imagemFile);
+      console.log("Imagem convertida para base64 com sucesso.");
+      console.log("Tamanho da string base64:", imagemBase64.length);
+      console.log(
+        "Amostra da string base64:",
+        imagemBase64.substring(0, 50) + "..."
+      );
+    } catch (error) {
+      console.error("Erro ao converter imagem para base64:", error);
+      showModal("Erro", `Falha ao converter imagem: ${error.message}`);
+      return null;
+    }
 
-    // Preparar FormData para envio (igual ao popup-creator)
-    const formData = new FormData();
-    formData.append("numeroAcao", numeroAcaoInput.value);
-    formData.append("imagem", imagemBase64); // String base64 da imagem em vez do arquivo
-    formData.append("tipoLayout", tipoLayout);
-    formData.append("titulo", tituloFinal);
-    formData.append("subtitulo", subtituloFinal);
-    formData.append("textoCTA", textoCTAFinal);
-    formData.append("corTitulo", corTituloFinal);
-    formData.append("corSubtitulo", corSubtituloFinal);
-    formData.append("corTextoCTA", corTextoCTAFinal);
-    formData.append("corFundoCTA", corFundoCTAFinal);
-    formData.append("corBordaCTA", corBordaCTAFinal);
-    formData.append("corInicio", corInicioInput.value);
-    formData.append("corFim", corFimInput.value);
-    formData.append("metodo", metodo);
-    formData.append("link", linkValue);
-    formData.append("codigo", codigoFinal);
-    formData.append("idCAT", idCATFinal);
+    // Preparar objeto JSON para envio
+    const dadosJSON = {
+      numeroAcao: numeroAcaoInput.value,
+      imagemBase64: imagemBase64, // Enviando a string base64 explicitamente
+      tipoLayout: tipoLayout,
+      titulo: tituloFinal,
+      subtitulo: subtituloFinal,
+      textoCTA: textoCTAFinal,
+      corTitulo: corTituloFinal,
+      corSubtitulo: corSubtituloFinal,
+      corTextoCTA: corTextoCTAFinal,
+      corFundoCTA: corFundoCTAFinal,
+      corBordaCTA: corBordaCTAFinal,
+      corInicio: corInicioInput.value,
+      corFim: corFimInput.value,
+      metodo: metodo,
+      link: linkValue,
+      codigo: codigoFinal,
+      idCAT: idCATFinal,
+    };
 
-    return formData;
+    return dadosJSON;
   }
 
-  // Modificação da função enviarParaAPI para usar FormData em vez de JSON
+
+  // Modificação da função enviarParaAPI para validar o objeto JSON antes de enviar
   async function enviarParaAPI() {
     if (!validarFormulario()) {
       return;
@@ -524,15 +539,32 @@ document.addEventListener("DOMContentLoaded", function () {
     btnEnviarAPI.classList.add("btnLoading");
 
     try {
-      // Preparar dados para o envio como FormData com imagem em base64
-      const formData = await prepararDadosAPI();
+      // Preparar dados para o envio como JSON com imagem em base64
+      const dadosJSON = await prepararDadosAPI();
 
-      console.log("Enviando FormData com imagem base64 para", apiUrl);
+      // Verificar se a preparação de dados foi bem-sucedida
+      if (!dadosJSON) {
+        throw new Error("Falha na preparação dos dados");
+      }
 
-      // Enviar dados para a API como FormData (como no popup-creator)
+      // Validar se a imagem base64 está presente
+      if (!dadosJSON.imagemBase64) {
+        throw new Error("Imagem base64 não foi gerada corretamente");
+      }
+
+      console.log("Dados preparados com sucesso. Enviando para API...");
+      console.log(
+        "Objeto JSON tem as seguintes chaves:",
+        Object.keys(dadosJSON).join(", ")
+      );
+
+      // Enviar dados para a API como JSON
       const response = await fetch(apiUrl, {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dadosJSON),
       });
 
       // Verificar o tipo de conteúdo da resposta
@@ -542,6 +574,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Tratar a resposta baseada no tipo de conteúdo
         if (contentType && contentType.includes("application/json")) {
           const data = await response.json();
+          console.log("Resposta do servidor:", data);
           showModal(
             "Sucesso",
             "Card criado com sucesso! O script foi gerado e executado no servidor."
