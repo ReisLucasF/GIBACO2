@@ -1,12 +1,9 @@
 const apiUrl = "http://localhost:3000/popup-creator";
 
 document.addEventListener("DOMContentLoaded", function () {
-
-  // Variáveis para gerenciar o estado da aplicação
   let imagemPreview = "";
   let imagemFile = null;
 
-  // Elementos do formulário
   const numeroAcaoInput = document.getElementById("numeroAcao");
   const imagemInput = document.getElementById("imagem");
   const selecionarLayoutSelect = document.getElementById("selecionarLayout");
@@ -45,7 +42,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const statusArquivo = document.getElementById("statusArquivo");
   const btnEnviarAPI = document.getElementById("btnEnviarAPI");
 
-  // Elementos de seções
   const tituloSection = document.getElementById("tituloSection");
   const subtituloSection = document.getElementById("subtituloSection");
   const ctaSection = document.getElementById("ctaSection");
@@ -53,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const linkSection = document.getElementById("linkSection");
   const pushSection = document.getElementById("pushSection");
 
-  // Elementos de preview
+  // preview
   const popupPreviewFull = document.getElementById("popupPreviewFull");
   const popupImageFull = document.getElementById("popupImageFull");
   const btnFecharFull = document.getElementById("btnFecharFull");
@@ -75,13 +71,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const popupSubtitle334 = document.getElementById("popupSubtitle334");
   const popupCTA334 = document.getElementById("popupCTA334");
 
-  // Elementos do modal
+  // modal
   const statusModal = document.getElementById("statusModal");
   const modalTitle = document.getElementById("modalTitle");
   const modalMessage = document.getElementById("modalMessage");
   const modalButton = document.getElementById("modalButton");
 
-  // Função para mostrar o modal
   function showModal(title, message, buttonText = "OK") {
     modalTitle.textContent = title;
     modalMessage.textContent = message;
@@ -89,24 +84,20 @@ document.addEventListener("DOMContentLoaded", function () {
     statusModal.style.display = "flex";
   }
 
-  // Fechar o modal ao clicar no botão
   modalButton.addEventListener("click", function () {
     statusModal.style.display = "none";
   });
 
-  // Funções para manipular o accordion
   const toggleAccordion = (section) => {
     const accordionContents = document.querySelectorAll(".accordionContent");
     const accordionIcons = document.querySelectorAll(".accordionIcon");
     const accordionHeaders = document.querySelectorAll(".accordionHeader");
 
-    // Verificar se a seção já está aberta
     const content = document.getElementById(section);
     const header = document.querySelector(`[data-section="${section}"]`);
     const icon = header.querySelector(".accordionIcon");
     const isActive = header.classList.contains("active");
 
-    // Fechar todas as seções primeiro
     accordionContents.forEach((content) => {
       content.style.display = "none";
     });
@@ -119,18 +110,15 @@ document.addEventListener("DOMContentLoaded", function () {
       header.classList.remove("active");
     });
 
-    // Se a seção já estava ativa, deixe-a fechada e retorne
     if (isActive) {
       return;
     }
 
-    // Abrir a seção selecionada (apenas se não estava ativa antes)
     content.style.display = "block";
     icon.classList.add("rotated");
     header.classList.add("active");
   };
 
-  // Adicionar event listeners para os headers do accordion
   document.querySelectorAll(".accordionHeader").forEach((header) => {
     header.addEventListener("click", function () {
       const section = this.getAttribute("data-section");
@@ -138,7 +126,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Função para lidar com upload de imagem
   imagemInput.addEventListener("change", function (e) {
     const file = e.target.files[0];
     if (file) {
@@ -162,32 +149,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Função para atualizar o preview em tempo real
   function updatePreview() {
     const tipoLayout = selecionarLayoutSelect.value;
 
-    // Atualizar visibilidade dos layouts de preview
     popupPreviewFull.style.display = tipoLayout === "335" ? "block" : "none";
     popupPreview333.style.display = tipoLayout === "333" ? "block" : "none";
     popupPreview334.style.display = tipoLayout === "334" ? "block" : "none";
 
-    // Atualizar fundo com gradiente
     if (tipoLayout !== "335") {
       popupPreview333.style.backgroundImage = `linear-gradient(45deg, ${corInicioInput.value}, ${corFimInput.value})`;
       popupPreview334.style.backgroundImage = `linear-gradient(45deg, ${corInicioInput.value}, ${corFimInput.value})`;
     }
 
-    // Atualizar texto do botão fechar
     btnFecharTextoFull.textContent = textoBtnFecharInput.value;
     btnFecharTexto333.textContent = textoBtnFecharInput.value;
     btnFecharTexto334.textContent = textoBtnFecharInput.value;
 
-    // Atualizar cor do botão fechar
     btnFecharFull.style.color = corBtnFecharInput.value;
     btnFechar333.style.color = corBtnFecharInput.value;
     btnFechar334.style.color = corBtnFecharInput.value;
 
-    // Atualizar fontes com base no tamanho selecionado
     const fontSizeTitle =
       tamanhoTituloSelect.value === "65"
         ? "20pt"
@@ -201,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ? "14pt"
         : "13pt";
 
-    // Atualizar conteúdo para layout 333
+    // layout 333
     popupTitle333.textContent = tituloInput.value;
     popupTitle333.style.color = corTituloInput.value;
     popupTitle333.style.fontSize = fontSizeTitle;
@@ -215,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
     popupCTA333.style.backgroundColor = corFundoCTAInput.value;
     popupCTA333.style.border = `2px solid ${corBordaCTAInput.value}`;
 
-    // Atualizar conteúdo para layout 334
+    // layout 334
     popupTitle334.textContent = tituloInput.value;
     popupTitle334.style.color = corTituloInput.value;
     popupTitle334.style.fontSize = fontSizeTitle;
@@ -230,7 +211,6 @@ document.addEventListener("DOMContentLoaded", function () {
     popupCTA334.style.border = `2px solid ${corBordaCTAInput.value}`;
   }
 
-  // Função para atualizar a imagem no preview
   function atualizarImagemPreview() {
     if (imagemPreview) {
       popupImageFull.style.backgroundImage = `url(${imagemPreview})`;
@@ -243,11 +223,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Função para atualizar visibilidade com base no layout
   function updateLayoutVisibility() {
     const tipoLayout = selecionarLayoutSelect.value;
 
-    // Para o layout 335 (imagem livre), esconder campos de texto e fundo
     if (tipoLayout === "335") {
       tituloSection.style.display = "none";
       subtituloSection.style.display = "none";
@@ -260,11 +238,9 @@ document.addEventListener("DOMContentLoaded", function () {
       fundoSection.style.display = "block";
     }
 
-    // Atualizar o preview
     updatePreview();
   }
 
-  // Função para atualizar a visibilidade dos tipos de link
   function updateLinkTypesVisibility() {
     const tipoLink = tipoLinkSelect.value;
 
@@ -283,7 +259,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Função para mostrar/esconder campo de entrada manual
   function updateManualInputsVisibility() {
     codigoManualContainer.style.display =
       codigoSelect.value === "manual" ? "block" : "none";
@@ -291,15 +266,13 @@ document.addEventListener("DOMContentLoaded", function () {
       idSelect.value === "manual" ? "block" : "none";
   }
 
-  // Função para validar formato hexadecimal de cores
   function validarFormatoHex(cor) {
-    if (!cor || cor === "") return true; // Permitir vazio
+    if (!cor || cor === "") return true;
     if (!cor.startsWith("#") || cor.length !== 7) return false;
     const hexRegex = /^#[0-9A-Fa-f]{6}$/;
     return hexRegex.test(cor);
   }
 
-  // Função para verificar contraste entre cores
   function verificarContrasteCores(corFundo, corTexto, tipoTexto) {
     if (!corFundo || !corTexto) return true;
     if (corFundo.toLowerCase() === corTexto.toLowerCase()) {
@@ -312,7 +285,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return true;
   }
 
-  // Função para verificar a resolução da imagem com base no tipo de layout
   function verificarResolucaoImagem(imagem) {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -344,8 +316,7 @@ document.addEventListener("DOMContentLoaded", function () {
             )
           );
         } else {
-          // Verificar o tamanho do arquivo da imagem (limite de 100KB)
-          const limiteTamanhoBytes = 100 * 1024; // 100 KB em bytes
+          const limiteTamanhoBytes = 100 * 1024;
           if (imagem.size > limiteTamanhoBytes) {
             showModal(
               "Erro",
@@ -356,13 +327,11 @@ document.addEventListener("DOMContentLoaded", function () {
             statusArquivo.style.color = "red";
             reject(new Error("Tamanho da imagem excede o limite de 100KB."));
           } else {
-            // Se a resolução e o tamanho estiverem dentro dos limites permitidos
             resolve();
           }
         }
       };
 
-      // Evento onerror para lidar com erros ao carregar a imagem
       img.onerror = () => {
         showModal("Erro", "Erro ao carregar a imagem.");
         statusArquivo.textContent = "Erro ao carregar a imagem";
@@ -370,14 +339,11 @@ document.addEventListener("DOMContentLoaded", function () {
         reject(new Error("Erro ao carregar a imagem."));
       };
 
-      // Carregar a imagem a partir do objeto Blob
       img.src = URL.createObjectURL(imagem);
     });
   }
 
-  // Função para validar formulário
   function validarFormulario() {
-    // Definir campos que não podem conter espaço
     const camposComEspaco = {
       corBordaCTA: corBordaCTAInput,
       corFundoCTA: corFundoCTAInput,
@@ -389,7 +355,6 @@ document.addEventListener("DOMContentLoaded", function () {
       corBtnFechar: corBtnFecharInput,
     };
 
-    // Verificar campos que não podem conter espaço
     for (const [campoId, elemento] of Object.entries(camposComEspaco)) {
       const valorCampo = elemento.value.trim();
       if (valorCampo && valorCampo.includes(" ")) {
@@ -401,9 +366,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // Validações de cores para os layouts com texto
     if (selecionarLayoutSelect.value !== "335") {
-      // Validar contraste entre cores
       if (
         !verificarContrasteCores(
           corInicioInput.value,
@@ -446,7 +409,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return false;
     }
 
-    // Validações básicas
     if (!imagemFile) {
       showModal("Erro", "É necessário selecionar uma imagem.");
       return false;
@@ -457,7 +419,6 @@ document.addEventListener("DOMContentLoaded", function () {
       return false;
     }
 
-    // Validação específica do tipo de link
     const tipoLink = tipoLinkSelect.value;
 
     if (tipoLink === "2") {
@@ -486,7 +447,6 @@ document.addEventListener("DOMContentLoaded", function () {
   async function prepararDadosAPI() {
     const tipoLayout = selecionarLayoutSelect.value;
 
-    // Determinar valores com base no layout
     let tituloFinal = tipoLayout === "335" ? "" : tituloInput.value;
     let subtituloFinal = tipoLayout === "335" ? "" : subtituloInput.value;
     let textoCTAFinal = tipoLayout === "335" ? "" : textoCTAInput.value;
@@ -496,7 +456,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let corFundoCTAFinal = tipoLayout === "335" ? "" : corFundoCTAInput.value;
     let corBordaCTAFinal = tipoLayout === "335" ? "" : corBordaCTAInput.value;
 
-    // Definir tamanhos para o envio
     let setTamanhoTitulo = "1";
     if (tamanhoTituloSelect.value === "50") setTamanhoTitulo = "2";
     else if (tamanhoTituloSelect.value === "65") setTamanhoTitulo = "3";
@@ -505,7 +464,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (tamanhoSubtituloSelect.value === "28") setTamanhoSubtitulo = "2";
     else if (tamanhoSubtituloSelect.value === "32") setTamanhoSubtitulo = "3";
 
-    // Preparar dados do link e ID
+    // link e ID
     const tipoLink = tipoLinkSelect.value;
     let idCATFinal = "";
     let codigoFinal = "";
@@ -540,13 +499,11 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // Converter a imagem para base64
     const imagemBase64 = await convertImageToBase64(imagemFile);
 
-    // Preparar FormData para envio (mantendo compatibilidade com a API)
     const formData = new FormData();
     formData.append("numeroAcao", numeroAcaoInput.value);
-    formData.append("imagem", imagemBase64); // String base64 da imagem em vez do arquivo
+    formData.append("imagem", imagemBase64);
     formData.append("tipoLayout", tipoLayout);
     formData.append("titulo", tituloFinal);
     formData.append("subtitulo", subtituloFinal);
@@ -570,7 +527,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return formData;
   }
 
-  // Nova função para converter imagem para Base64
   function convertImageToBase64(file) {
     return new Promise((resolve, reject) => {
       if (!file) {
@@ -581,10 +537,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const reader = new FileReader();
 
       reader.onload = function (e) {
-        // e.target.result já contém a imagem como DataURL (exemplo: data:image/jpeg;base64,/9j/4AAQ...)
         const dataUrl = e.target.result;
-
-        // Você pode escolher enviar a string base64 com ou sem o prefixo data:image
         // Opção 1: Extrair apenas a parte base64 (sem o prefixo)
         // const base64String = dataUrl.split(',')[1];
 
@@ -602,97 +555,16 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Modificação da função enviarParaAPI
-  async function enviarParaAPI() {
-    try {
-      // Primeiro validamos a imagem
-      await verificarResolucaoImagem(imagemFile);
+  const enviarParaAPI = window.apiService.createApiSender({
+    verificarResolucaoImagem: verificarResolucaoImagem,
+    validarFormulario: validarFormulario,
+    prepararDadosAPI: prepararDadosAPI,
+    showModal: showModal,
+    btnEnviarAPI: btnEnviarAPI,
+    apiUrl: apiUrl,
+    imagemFile: () => imagemFile,
+  });
 
-      // Depois validamos o formulário
-      if (!validarFormulario()) {
-        return;
-      }
-
-      // Alterar o botão para estado de loading
-      btnEnviarAPI.innerHTML = '<div class="loadingSpinner"></div> Enviando...';
-      btnEnviarAPI.disabled = true;
-      btnEnviarAPI.classList.add("btnLoading");
-
-      try {
-        // Preparar os dados para o envio (FormData com a imagem como base64)
-        const formData = await prepararDadosAPI();
-
-        // Enviar dados para a API como FormData (mantendo a compatibilidade)
-        const response = await fetch(apiUrl, {
-          method: "POST",
-          body: formData,
-        });
-
-        // Verificar o tipo de conteúdo da resposta
-        const contentType = response.headers.get("content-type");
-
-        if (response.ok) {
-          // Tratar a resposta baseada no tipo de conteúdo
-          if (contentType && contentType.includes("application/json")) {
-            const data = await response.json();
-            showModal(
-              "Sucesso",
-              "Popup criado com sucesso! O script foi gerado e executado no servidor."
-            );
-          } else {
-            // Resposta não é JSON, mas ainda é um sucesso
-            showModal(
-              "Sucesso",
-              "Popup criado com sucesso! O servidor respondeu com êxito."
-            );
-          }
-        } else {
-          // Tratar erro baseado no tipo de conteúdo
-          if (contentType && contentType.includes("application/json")) {
-            try {
-              const errorData = await response.json();
-              showModal(
-                "Erro",
-                `Falha ao criar o popup: ${
-                  errorData.message || "Erro desconhecido"
-                }`
-              );
-            } catch (e) {
-              // Falhou ao parsear JSON
-              const errorText = await response.text();
-              showModal(
-                "Erro",
-                `Falha ao criar o popup. Resposta do servidor: ${
-                  errorText.substring(0, 100) || "Erro desconhecido"
-                }`
-              );
-            }
-          } else {
-            // Resposta de erro não é JSON
-            const errorText = await response.text();
-            showModal(
-              "Erro",
-              `Falha ao criar o popup. Código: ${response.status}. Resposta: ${
-                errorText.substring(0, 100) || "Erro desconhecido"
-              }`
-            );
-          }
-        }
-      } catch (error) {
-        showModal("Erro", `Falha ao enviar dados: ${error.message}`);
-      } finally {
-        // Restaurar o botão ao estado normal
-        btnEnviarAPI.innerHTML = "Enviar para API";
-        btnEnviarAPI.disabled = false;
-        btnEnviarAPI.classList.remove("btnLoading");
-      }
-    } catch (error) {
-      // Erros da validação da imagem já são tratados na função verificarResolucaoImagem
-      console.error("Erro na validação:", error);
-    }
-  }
-
-  // Event Listeners para os campos de cores
   corTituloColorInput.addEventListener("input", function () {
     corTituloInput.value = this.value;
     updatePreview();
@@ -789,33 +661,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Event Listeners para os inputs de texto
   tituloInput.addEventListener("input", updatePreview);
   subtituloInput.addEventListener("input", updatePreview);
   textoCTAInput.addEventListener("input", updatePreview);
   textoBtnFecharInput.addEventListener("input", updatePreview);
 
-  // Event listeners para tamanhos
   tamanhoTituloSelect.addEventListener("change", updatePreview);
   tamanhoSubtituloSelect.addEventListener("change", updatePreview);
 
-  // Event Listener para o select de layout
   selecionarLayoutSelect.addEventListener("change", function () {
     updateLayoutVisibility();
     updatePreview();
   });
 
-  // Event Listener para tipo de link
   tipoLinkSelect.addEventListener("change", updateLinkTypesVisibility);
 
-  // Event Listeners para opções manuais
   codigoSelect.addEventListener("change", updateManualInputsVisibility);
   idSelect.addEventListener("change", updateManualInputsVisibility);
 
-  // Event Listener para botão de enviar para API
   btnEnviarAPI.addEventListener("click", enviarParaAPI);
 
-  // Inicialização
   updateLayoutVisibility();
   updateLinkTypesVisibility();
   updateManualInputsVisibility();

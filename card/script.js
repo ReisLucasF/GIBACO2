@@ -1,11 +1,10 @@
 const apiUrl = "http://localhost:3000/card-creator";
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Variáveis para gerenciar o estado da aplicação
   let imagemPreview = "";
   let imagemFile = null;
 
-  // Elementos do formulário
+  // Form
   const numeroAcaoInput = document.getElementById("numeroAcao");
   const imagemInput = document.getElementById("imagem");
   const selecionarLayoutSelect = document.getElementById("selecionarLayout");
@@ -39,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const statusArquivo = document.getElementById("statusArquivo");
   const btnEnviarAPI = document.getElementById("btnEnviarAPI");
 
-  // Elementos de layout
+  // layout
   const linkSection = document.getElementById("linkSection");
   const pushSection = document.getElementById("pushSection");
   const tituloSection = document.getElementById("tituloSection");
@@ -47,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const ctaSection = document.getElementById("ctaSection");
   const coresCTASection = document.getElementById("coresCTASection");
 
-  // Elementos de preview
+  // preview
   const cardPreview = document.getElementById("cardPreview");
   const cardPreviewIMG = document.getElementById("cardPreviewIMG");
   const cardPreviewContent = document.getElementById("cardPreviewContent");
@@ -55,14 +54,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const subtituloPreview = document.getElementById("subtituloPreview");
   const textoCTAPreview = document.getElementById("textoCTAPreview");
   const phoneTime = document.getElementById("phoneTime");
-
-  // Elementos do modal
   const statusModal = document.getElementById("statusModal");
   const modalTitle = document.getElementById("modalTitle");
   const modalMessage = document.getElementById("modalMessage");
   const modalButton = document.getElementById("modalButton");
 
-  // Função para mostrar o modal
+  // mostrar o modal
   function showModal(title, message, buttonText = "OK") {
     modalTitle.textContent = title;
     modalMessage.textContent = message;
@@ -70,12 +67,10 @@ document.addEventListener("DOMContentLoaded", function () {
     statusModal.style.display = "flex";
   }
 
-  // Fechar o modal ao clicar no botão
   modalButton.addEventListener("click", function () {
     statusModal.style.display = "none";
   });
 
-  // Atualizar horário do telefone
   function updatePhoneTime() {
     const now = new Date();
     phoneTime.textContent = now.toLocaleTimeString("pt-BR", {
@@ -84,29 +79,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Atualizar o horário inicialmente e a cada minuto
   updatePhoneTime();
   setInterval(updatePhoneTime, 60000);
 
-  // Funções para manipular o accordion
+  // accordion
   const toggleAccordion = (section) => {
     const accordionContents = document.querySelectorAll(".accordionContent");
     const accordionIcons = document.querySelectorAll(".accordionIcon");
     const accordionHeaders = document.querySelectorAll(".accordionHeader");
 
-    // Verificar se a seção clicada já está aberta
     const content = document.getElementById(section);
     const header = document.querySelector(`[data-section="${section}"]`);
     const icon = header.querySelector(".accordionIcon");
     const isActive = header.classList.contains("active");
 
     if (isActive) {
-      // Se já está ativa, apenas fechamos
       content.style.display = "none";
       icon.classList.remove("rotated");
       header.classList.remove("active");
     } else {
-      // Se não está ativa, fechamos todas e abrimos esta
       accordionContents.forEach((item) => {
         item.style.display = "none";
       });
@@ -119,14 +110,12 @@ document.addEventListener("DOMContentLoaded", function () {
         item.classList.remove("active");
       });
 
-      // Abrir a seção clicada
       content.style.display = "block";
       icon.classList.add("rotated");
       header.classList.add("active");
     }
   };
 
-  // Adicionar event listeners para os headers do accordion
   document.querySelectorAll(".accordionHeader").forEach((header) => {
     header.addEventListener("click", function () {
       const section = this.getAttribute("data-section");
@@ -134,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Função para lidar com upload de imagem
+  // upload da imagem
   imagemInput.addEventListener("change", function (e) {
     const file = e.target.files[0];
     if (file) {
@@ -158,27 +147,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Função para atualizar o preview em tempo real
   function updatePreview() {
-    // Atualizar background do card
+    // Atualizar estilos
     cardPreview.style.backgroundImage = `linear-gradient(45deg, ${corInicioInput.value}, ${corFimInput.value})`;
 
-    // Atualizar título
     tituloPreview.textContent = tituloInput.value;
     tituloPreview.style.color = corTituloInput.value;
 
-    // Atualizar subtítulo
     subtituloPreview.textContent = subtituloInput.value;
     subtituloPreview.style.color = corSubtituloInput.value;
 
-    // Atualizar CTA
     textoCTAPreview.textContent = textoCTAInput.value;
     textoCTAPreview.style.color = corTextoCTAInput.value;
     textoCTAPreview.style.backgroundColor = corFundoCTAInput.value;
     textoCTAPreview.style.border = `2px solid ${corBordaCTAInput.value}`;
   }
 
-  // Função para atualizar visibilidade com base no layout
+  // atualizar layout
   function updateLayoutVisibility() {
     const tipoLayout = selecionarLayoutSelect.value;
     const isLayoutDireita = ["322", "323", "324", "275"].includes(tipoLayout);
@@ -186,7 +171,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const mostrarSubtitulo = !["320", "323"].includes(tipoLayout);
     const mostrarCTA = !["271", "275"].includes(tipoLayout);
 
-    // Atualizar a direção do layout
     if (isLayoutDireita) {
       cardPreview.classList.remove("layoutEsquerda");
       cardPreview.classList.add("layoutDireita");
@@ -199,19 +183,16 @@ document.addEventListener("DOMContentLoaded", function () {
       cardPreviewContent.style.order = "2";
     }
 
-    // Atualizar visibilidade de elementos do preview
     tituloPreview.style.display = mostrarTitulo ? "block" : "none";
     subtituloPreview.style.display = mostrarSubtitulo ? "block" : "none";
     textoCTAPreview.style.display = mostrarCTA ? "block" : "none";
 
-    // Atualizar visibilidade de campos do formulário
     tituloSection.style.display = mostrarTitulo ? "grid" : "none";
     subtituloSection.style.display = mostrarSubtitulo ? "grid" : "none";
     ctaSection.style.display = mostrarCTA ? "grid" : "none";
     coresCTASection.style.display = mostrarCTA ? "grid" : "none";
   }
 
-  // Função para atualizar a visibilidade dos tipos de link
   function updateLinkTypesVisibility() {
     const tipoLink = tipoLinkSelect.value;
 
@@ -230,7 +211,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Função para mostrar/esconder campo de entrada manual
   function updateManualInputsVisibility() {
     codigoManualContainer.style.display =
       codigoSelect.value === "manual" ? "block" : "none";
@@ -238,15 +218,13 @@ document.addEventListener("DOMContentLoaded", function () {
       idSelect.value === "manual" ? "block" : "none";
   }
 
-  // Função para validar formato hexadecimal de cores
   function validarFormatoHex(cor) {
-    if (!cor || cor === "") return true; // Permitir vazio
+    if (!cor || cor === "") return true;
     if (!cor.startsWith("#") || cor.length !== 7) return false;
     const hexRegex = /^#[0-9A-Fa-f]{6}$/;
     return hexRegex.test(cor);
   }
 
-  // Função para obter nome amigável dos campos
   function obterNomeAmigavel(idCampo) {
     const mapeamento = {
       corTitulo: "cor do título",
@@ -260,7 +238,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return mapeamento[idCampo] || idCampo;
   }
 
-  // Função para verificar o comprimento e formato da cor
   function verificarComprimentoCor(cor, nomeCampo) {
     if (cor.length === 0) return true;
     if (!validarFormatoHex(cor)) {
@@ -273,7 +250,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return true;
   }
 
-  // Função para verificar contraste entre cores
+  // verificar contraste entre cores
   function verificarContrasteCores(corFundo, corTexto, tipoTexto) {
     if (!corFundo || !corTexto) return true;
     if (corFundo.toLowerCase() === corTexto.toLowerCase()) {
@@ -286,21 +263,18 @@ document.addEventListener("DOMContentLoaded", function () {
     return true;
   }
 
-  // Função para validar o formulário antes de enviar para a API
+  // validar o formulário antes de enviar
   function validarFormulario() {
-    // Validar se tem imagem
     if (!imagemFile) {
       showModal("Erro", "É necessário selecionar uma imagem.");
       return false;
     }
 
-    // Validar número de ação
     if (!numeroAcaoInput.value) {
       showModal("Erro", "É necessário informar o número de ação.");
       return false;
     }
 
-    // Validar tamanho dos textos
     const tipoLayout = selecionarLayoutSelect.value;
     const mostrarTitulo = !["321", "324"].includes(tipoLayout);
     const mostrarSubtitulo = !["320", "323"].includes(tipoLayout);
@@ -315,7 +289,6 @@ document.addEventListener("DOMContentLoaded", function () {
       return false;
     }
 
-    // Validar formato de cores
     const cores = [
       { valor: corTituloInput.value, nome: "corTitulo" },
       { valor: corSubtituloInput.value, nome: "corSubtitulo" },
@@ -332,7 +305,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // Validar contraste entre cores
     if (
       !verificarContrasteCores(
         corInicioInput.value,
@@ -374,7 +346,6 @@ document.addEventListener("DOMContentLoaded", function () {
     )
       return false;
 
-    // Validação específica do tipo de link
     const tipoLink = tipoLinkSelect.value;
 
     if (tipoLink === "2") {
@@ -400,7 +371,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return true;
   }
 
-  // Função para converter imagem para Base64
   function convertImageToBase64(file) {
     return new Promise((resolve, reject) => {
       if (!file) {
@@ -411,10 +381,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const reader = new FileReader();
 
       reader.onload = function (e) {
-        // e.target.result já contém a imagem como DataURL
         const dataUrl = e.target.result;
-
-        // Você pode escolher enviar a string base64 com ou sem o prefixo data:image
         // Opção 1: Extrair apenas a parte base64 (sem o prefixo)
         // const base64String = dataUrl.split(',')[1];
 
@@ -432,11 +399,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Modificação da função prepararDadosAPI para garantir que a imagem seja enviada como base64
   async function prepararDadosAPI() {
     const tipoLayout = selecionarLayoutSelect.value;
 
-    // Determinar o que mostrar com base no layout
     const mostrarTitulo = !["321", "324"].includes(tipoLayout);
     const mostrarSubtitulo = !["320", "323"].includes(tipoLayout);
     const mostrarCTA = !["271", "275"].includes(tipoLayout);
@@ -450,7 +415,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let corFundoCTAFinal = mostrarCTA ? corFundoCTAInput.value : "";
     let corBordaCTAFinal = mostrarCTA ? corBordaCTAInput.value : "";
 
-    // Preparar dados do link e ID
+    //link e ID
     const tipoLink = tipoLinkSelect.value;
     let idCATFinal = "";
     let codigoFinal = "";
@@ -485,7 +450,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // Remover caracteres indesejados do texto
     function removerCaracteresIndesejados(texto) {
       if (!texto) return "";
       texto = texto.replace(/R\$(?=[\[\]'"`]\S)/g, "");
@@ -495,7 +459,7 @@ document.addEventListener("DOMContentLoaded", function () {
     tituloFinal = removerCaracteresIndesejados(tituloFinal);
     subtituloFinal = removerCaracteresIndesejados(subtituloFinal);
 
-    // Converter a imagem para base64
+    // Convertendo para base64
     let imagem = "";
     try {
       imagem = await convertImageToBase64(imagemFile);
@@ -508,10 +472,9 @@ document.addEventListener("DOMContentLoaded", function () {
       return null;
     }
 
-    // Preparar objeto JSON para envio
     const dadosJSON = {
       numeroAcao: numeroAcaoInput.value,
-      imagem: imagem, // Enviando a string base64 explicitamente
+      imagem: imagem,
       tipoLayout: tipoLayout,
       titulo: tituloFinal,
       subtitulo: subtituloFinal,
@@ -532,107 +495,13 @@ document.addEventListener("DOMContentLoaded", function () {
     return dadosJSON;
   }
 
-  // Modificação da função enviarParaAPI para validar o objeto JSON antes de enviar
-  async function enviarParaAPI() {
-    if (!validarFormulario()) {
-      return;
-    }
-
-    // Alterar o botão para estado de loading
-    btnEnviarAPI.innerHTML = '<div class="loadingSpinner"></div> Enviando...';
-    btnEnviarAPI.disabled = true;
-    btnEnviarAPI.classList.add("btnLoading");
-
-    try {
-      // Preparar dados para o envio como JSON com imagem em base64
-      const dadosJSON = await prepararDadosAPI();
-
-      // Verificar se a preparação de dados foi bem-sucedida
-      if (!dadosJSON) {
-        throw new Error("Falha na preparação dos dados");
-      }
-
-      // Validar se a imagem base64 está presente
-      if (!dadosJSON.imagem) {
-        throw new Error("Imagem base64 não foi gerada corretamente");
-      }
-
-      console.log("Dados preparados com sucesso. Enviando para API...");
-      console.log(
-        "Objeto JSON tem as seguintes chaves:",
-        Object.keys(dadosJSON).join(", ")
-      );
-
-      // Enviar dados para a API como JSON
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dadosJSON),
-      });
-
-      // Verificar o tipo de conteúdo da resposta
-      const contentType = response.headers.get("content-type");
-
-      if (response.ok) {
-        // Tratar a resposta baseada no tipo de conteúdo
-        if (contentType && contentType.includes("application/json")) {
-          const data = await response.json();
-          console.log("Resposta do servidor:", data);
-          showModal(
-            "Sucesso",
-            "Card criado com sucesso! O script foi gerado e executado no servidor."
-          );
-        } else {
-          // Resposta não é JSON, mas ainda é um sucesso
-          showModal(
-            "Sucesso",
-            "Card criado com sucesso! O servidor respondeu com êxito."
-          );
-        }
-      } else {
-        // Tratar erro baseado no tipo de conteúdo
-        if (contentType && contentType.includes("application/json")) {
-          try {
-            const errorData = await response.json();
-            showModal(
-              "Erro",
-              `Falha ao criar o card: ${
-                errorData.message || "Erro desconhecido"
-              }`
-            );
-          } catch (e) {
-            // Falhou ao parsear JSON
-            const errorText = await response.text();
-            showModal(
-              "Erro",
-              `Falha ao criar o card. Resposta do servidor: ${
-                errorText.substring(0, 100) || "Erro desconhecido"
-              }`
-            );
-          }
-        } else {
-          // Resposta de erro não é JSON
-          const errorText = await response.text();
-          showModal(
-            "Erro",
-            `Falha ao criar o card. Código: ${response.status}. Resposta: ${
-              errorText.substring(0, 100) || "Erro desconhecido"
-            }`
-          );
-        }
-      }
-    } catch (error) {
-      showModal("Erro", `Falha ao enviar dados: ${error.message}`);
-      console.error("Erro detalhado:", error);
-    } finally {
-      // Restaurar o botão ao estado normal
-      btnEnviarAPI.innerHTML = "Enviar para API";
-      btnEnviarAPI.disabled = false;
-      btnEnviarAPI.classList.remove("btnLoading");
-    }
-  }
+  const enviarParaAPI = window.apiService({
+    validarFormulario: validarFormulario,
+    prepararDadosAPI: prepararDadosAPI,
+    showModal: showModal,
+    btnEnviarAPI: btnEnviarAPI,
+    apiUrl: apiUrl,
+  });
 
   // Event Listeners para os campos de cores
   corTituloColorInput.addEventListener("input", function () {
@@ -719,28 +588,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Event Listeners para os inputs de texto
   tituloInput.addEventListener("input", updatePreview);
   subtituloInput.addEventListener("input", updatePreview);
   textoCTAInput.addEventListener("input", updatePreview);
 
-  // Event Listener para o select de layout
   selecionarLayoutSelect.addEventListener("change", function () {
     updateLayoutVisibility();
     updatePreview();
   });
 
-  // Event Listener para tipo de link
   tipoLinkSelect.addEventListener("change", updateLinkTypesVisibility);
 
-  // Event Listeners para opções manuais
   codigoSelect.addEventListener("change", updateManualInputsVisibility);
   idSelect.addEventListener("change", updateManualInputsVisibility);
 
-  // Event Listener para botão de enviar para API
   btnEnviarAPI.addEventListener("click", enviarParaAPI);
 
-  // Inicialização
   updateLayoutVisibility();
   updateLinkTypesVisibility();
   updateManualInputsVisibility();
