@@ -5,21 +5,16 @@ const path = require("path");
 const fs = require("fs");
 const { Buffer } = require("buffer");
 
-// Configurar o Express
 const app = express();
 const port = 3000;
 
-// Habilitar CORS para permitir requisições do frontend
 app.use(cors());
 
-// Configurar o middleware para JSON (com limite maior para imagens base64)
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
-// Configurar o multer para upload de arquivos
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    // Cria diretório para uploads se não existir
     const uploadDir = path.join(__dirname, "uploads");
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
@@ -27,70 +22,55 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
-    // Adiciona timestamp para evitar nomes duplicados
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
 const upload = multer({ storage: storage });
 
-// Listar todos os POSTs recebidos
 let receivedRequests = [];
 
-// Rota para servir arquivos estáticos (HTML, CSS, JS)
 app.use(express.static("public"));
 
-// Função para processar e salvar a requisição
 function processRequest(req, endpoint, file = null) {
-  // Criar uma cópia dos dados do corpo
   const bodyData = { ...req.body };
 
-  // Se tiver um arquivo enviado via multer, adicionar info do arquivo
   if (file) {
     bodyData.imagem = `[UPLOADED_FILE: ${file.originalname}]`;
   }
 
-  // Se houver uma imagem base64 no campo imagem, truncá-la para exibição
   if (
     bodyData.imagem &&
     typeof bodyData.imagem === "string" &&
     bodyData.imagem.length > 100
   ) {
-    // Guardar o tamanho original
     const originalLength = bodyData.imagem.length;
 
-    // Truncar para exibição
     bodyData.imagem = `${bodyData.imagem.substring(
       0,
       100
     )}... (${originalLength} caracteres)`;
   }
 
-  // Se houver uma imagem base64 no campo imagem, truncá-la para exibição
   if (
     bodyData.imagem &&
     typeof bodyData.imagem === "string" &&
     bodyData.imagem.length > 100
   ) {
-    // Guardar o tamanho original
     const originalLength = bodyData.imagem.length;
 
-    // Truncar para exibição
     bodyData.imagem = `${bodyData.imagem.substring(
       0,
       100
     )}... (${originalLength} caracteres)`;
   }
 
-  // Criar uma versão limpa do objeto para documentação
   const cleanData = { ...req.body };
 
-  // Se tiver um arquivo enviado via multer, adicionar na versão limpa
   if (file) {
     cleanData.imagem = "[UPLOADED_FILE]";
   }
 
-  // Tratar a imagem base64 para a versão limpa (substituir por placeholder)
   if (
     cleanData.imagem &&
     typeof cleanData.imagem === "string" &&
@@ -107,20 +87,15 @@ function processRequest(req, endpoint, file = null) {
     cleanData.imagem = "[BASE64_IMAGE_STRING]";
   }
 
-  // Criar objeto da requisição com dados
   const requestData = {
-    id: Date.now().toString(), // ID único para referência
+    id: Date.now().toString(),
     endpoint: endpoint,
     timestamp: new Date().toISOString(),
     contentType: req.headers["content-type"] || "unknown",
     body: bodyData,
-    // Guardar uma versão limpa do body para documentação
     cleanBody: JSON.stringify(cleanData, null, 2),
-    // Manter o original também por completude
     originalBody: JSON.stringify(req.body, null, 2),
-    // Guardar os headers para referência
     headers: req.headers,
-    // Informações do arquivo, se enviado
     file: file
       ? {
           filename: file.filename,
@@ -132,10 +107,8 @@ function processRequest(req, endpoint, file = null) {
       : null,
   };
 
-  // Adicionar à lista de requisições recebidas
   receivedRequests.unshift(requestData);
 
-  // Limitar a 10 itens para não sobrecarregar
   if (receivedRequests.length > 10) {
     receivedRequests = receivedRequests.slice(0, 10);
   }
@@ -143,14 +116,11 @@ function processRequest(req, endpoint, file = null) {
   return requestData;
 }
 
-// Endpoint para popup-creator - agora usando o middleware upload
 app.post("/popup-creator", upload.single("imagem"), (req, res) => {
   console.log("🔵 POST recebido em /popup-creator");
 
-  // Processar a requisição, incluindo o arquivo se houver
   const requestData = processRequest(req, "popup-creator", req.file);
 
-  // Log no console do servidor
   console.log("📄 Dados do formulário:");
   console.table(requestData.body);
 
@@ -159,7 +129,6 @@ app.post("/popup-creator", upload.single("imagem"), (req, res) => {
     console.table(requestData.file);
   }
 
-  // Responder ao cliente
   res.status(200).json({
     success: true,
     message: "Popup criado com sucesso!",
@@ -167,18 +136,14 @@ app.post("/popup-creator", upload.single("imagem"), (req, res) => {
   });
 });
 
-// Endpoint para card-creator
 app.post("/card-creator", (req, res) => {
   console.log("🔵 POST recebido em /card-creator");
 
-  // Processar a requisição
   const requestData = processRequest(req, "card-creator");
 
-  // Log no console do servidor
   console.log("📄 Dados do formulário:");
   console.table(requestData.body);
 
-  // Responder ao cliente
   res.status(200).json({
     success: true,
     message: "Card criado com sucesso!",
@@ -186,12 +151,10 @@ app.post("/card-creator", (req, res) => {
   });
 });
 
-// Endpoint para visualizar todos os requests recebidos
 app.get("/requests", (req, res) => {
   res.json(receivedRequests);
 });
 
-// Endpoint para obter dados de uma requisição específica
 app.get("/request/:id", (req, res) => {
   const requestId = req.params.id;
   const request = receivedRequests.find((r) => r.id === requestId);
@@ -202,7 +165,7 @@ app.get("/request/:id", (req, res) => {
     });
   }
 
-  const format = req.query.format || "clean"; // Padrão é 'clean'
+  const format = req.query.format || "clean";
 
   if (format === "original") {
     res.json({
@@ -215,7 +178,6 @@ app.get("/request/:id", (req, res) => {
   }
 });
 
-// Rota de status da API
 app.get("/", (req, res) => {
   res.send(`
     <!DOCTYPE html>
@@ -632,7 +594,6 @@ app.get("/", (req, res) => {
   `);
 });
 
-// Iniciar o servidor
 app.listen(port, () => {
   console.log(`✅ API mock rodando em http://localhost:${port}`);
   console.log(`📊 Visualize as requisições em http://localhost:${port}`);
